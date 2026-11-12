@@ -1,6 +1,6 @@
 # Cadence
 
-Cadence sells video courses to students. This glossary covers the language around buying, taking and refunding courses.
+Cadence sells video courses to students. This glossary covers the language around buying, taking and refunding courses, and the Notifications that tell people about it.
 
 ## Language
 
@@ -34,6 +34,24 @@ A Student who has lost their Enrollment on a course but still has progress on it
 **Watched**:
 Seconds of video a Student has actually played in a course: the furthest point reached in each lesson, added up. Not lessons opened.
 _Avoid_: Viewed, Progress
+
+### Lessons
+
+**Lesson Question**:
+A top-level post under a lesson by anyone other than the course's Instructor or a Platform Admin. It may be a remark rather than a question; it still waits for an answer.
+_Avoid_: Question (on its own), Comment, Discussion, Thread
+
+**Reply**:
+A post answering a Lesson Question.
+_Avoid_: Comment, Answer
+
+**Answered Lesson Question**:
+A Lesson Question the course's Instructor or a Platform Admin has replied to.
+_Avoid_: Resolved, Closed
+
+**Quiz Question**:
+One item in a lesson's quiz. Not a Lesson Question.
+_Avoid_: Question (on its own)
 
 ### Purchases
 
@@ -92,3 +110,21 @@ A Refund where the money couldn't be sent. The Refund Request stays approved, be
 **Watch Limit**:
 The amount of Watched time on a course past which a Student can no longer get a Refund, because they've had the course.
 _Avoid_: Watch cap, Viewing threshold
+
+### Notifications
+
+**Notification**:
+A message Cadence keeps for one person about something that happened that concerns them, or that is waiting on them. It waits until they see it and can be looked back on.
+_Avoid_: Alert, Message, Toast (a Toast is brief feedback on the person's own action, not a Notification)
+
+**Reminder**:
+A Notification sent because something has been waiting on a person and they've gone quiet on it. It is called off if they act before it is due.
+_Avoid_: Nudge, Come-back Notification
+
+**Digest**:
+A Notification sent on a regular schedule that sums up several things in one message.
+_Avoid_: Summary, Recap
+
+**Push Notification**:
+A Notification that also pops up on the person's phone, so they see it even when they don't have Cadence open.
+_Avoid_: Alert
