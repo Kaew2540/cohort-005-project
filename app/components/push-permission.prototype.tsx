@@ -53,7 +53,7 @@ const PUSH_LIST: Record<Who, string[]> = {
   student: [
     "Someone Replies to your Lesson Question",
     "Your Refund Request is approved, declined or refunded",
-    "A nudge when a course has gone quiet for a week",
+    "A Reminder when a course has gone quiet for a week",
   ],
   "team-admin": [
     "Your Refund Request is approved, declined or refunded",
@@ -783,6 +783,48 @@ export function usePushPermissionPrototype(
   const [moment, setMoment] = useState<Moment | null>(null);
   const who = whoFor(currentUser, isTeamAdmin);
 
+  function triggerMoment(m: Moment) {
+    setMoment(m);
+    setSim((s) => ({ ...s, askedMoments: [...s.askedMoments, m.key] }));
+  }
+
+  // Variant A asks nothing on arrival, so the page needs a visible way to "do the action".
+  const momentBarA = (
+    <div className="flex flex-wrap items-center gap-2 border-b-2 border-dashed border-fuchsia-500 bg-fuchsia-50 px-6 py-2 text-sm dark:bg-fuchsia-950">
+      <span className="font-semibold text-fuchsia-700 dark:text-fuchsia-300">
+        PROTOTYPE A:
+      </span>
+      <span className="text-muted-foreground">
+        Nothing is asked on arrival. Pretend you just did one of these:
+      </span>
+      {MOMENTS[who].map((m) => {
+        const asked = sim.askedMoments.includes(m.key);
+        return (
+          <Button
+            key={m.key}
+            size="sm"
+            variant="outline"
+            disabled={asked}
+            onClick={() => triggerMoment(m)}
+          >
+            {m.label}
+            {asked && " (already asked)"}
+          </Button>
+        );
+      })}
+      {sim.notNow >= 2 && (
+        <span className="text-xs text-muted-foreground">
+          Said “Not now” twice: Cadence stops asking.
+        </span>
+      )}
+      {sim.perm !== "default" && (
+        <span className="text-xs text-muted-foreground">
+          Permission is “{sim.perm}”: nothing left to ask. Reset in the pink panel.
+        </span>
+      )}
+    </div>
+  );
+
   const overlay = (
     <>
       {variant === "A" && (
@@ -805,10 +847,7 @@ export function usePushPermissionPrototype(
         setSim={setSim}
         who={who}
         variant={variant}
-        onMoment={(m) => {
-          setMoment(m);
-          setSim((s) => ({ ...s, askedMoments: [...s.askedMoments, m.key] }));
-        }}
+        onMoment={triggerMoment}
       />
       <PrototypeSwitcher variants={VARIANTS} />
     </>
@@ -817,7 +856,12 @@ export function usePushPermissionPrototype(
   return {
     headerSlot:
       variant === "B" ? <BellB sim={sim} setSim={setSim} who={who} /> : null,
-    banner: variant === "C" ? <NudgeC sim={sim} setSim={setSim} /> : null,
+    banner:
+      variant === "A" ? (
+        momentBarA
+      ) : variant === "C" ? (
+        <NudgeC sim={sim} setSim={setSim} />
+      ) : null,
     main:
       variant === "C" && params.get("pushsetup") ? (
         <SetupPageC sim={sim} setSim={setSim} who={who} />
