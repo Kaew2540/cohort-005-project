@@ -52,5 +52,8 @@ export default [
   route("api/switch-user", "routes/api.switch-user.ts"),
   route("api/logout", "routes/api.logout.ts"),
   route("api/video-tracking", "routes/api.video-tracking.ts"),
+  // SPIKE (throwaway): one real Push Notification
+  route("spike/push", "routes/spike.push.tsx"),
+  route("firebase-messaging-sw.js", "routes/spike.sw.ts"),
   route("api/set-dev-country", "routes/api.set-dev-country.ts"),
 ] satisfies RouteConfig;
