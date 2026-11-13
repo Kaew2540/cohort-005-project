@@ -72,6 +72,8 @@ async function seed() {
 
   // Drop and recreate tables for a clean seed
   sqlite.exec(`
+    DROP TABLE IF EXISTS bookmarks;
+    DROP TABLE IF EXISTS notes;
     DROP TABLE IF EXISTS comments;
     DROP TABLE IF EXISTS course_ratings;
     DROP TABLE IF EXISTS video_watch_events;
@@ -1999,6 +2001,50 @@ This course is still in draft while the cluster examples are rewritten against t
 
   console.log(
     `Created ${countRows(schema.comments)} lesson comments across ${countRows(schema.comments, isNull(schema.comments.parentId))} threads.`
+  );
+
+  // ─── Bookmarks and Notes ───
+  // Private to each Student, so only enrolled students have them. Alex
+  // (students[0]) gets several across two courses so /saved has something to
+  // sort; one Note was edited after it was written.
+
+  db.insert(schema.bookmarks)
+    .values([
+      { userId: students[0].id, lessonId: course1LessonIds[2], createdAt: daysAgo(30) },
+      { userId: students[0].id, lessonId: course1LessonIds[5], createdAt: daysAgo(12) },
+      { userId: students[0].id, lessonId: course2LessonIds[1], createdAt: daysAgo(4) },
+      { userId: students[2].id, lessonId: course1LessonIds[3], createdAt: daysAgo(9) },
+    ])
+    .run();
+
+  db.insert(schema.notes)
+    .values([
+      {
+        userId: students[0].id,
+        lessonId: course1LessonIds[2],
+        body: "Use `npx tsc`, not a global install.\nCheck tsconfig \"strict\" before the next lesson.",
+        createdAt: daysAgo(30),
+        updatedAt: daysAgo(6),
+      },
+      {
+        userId: students[0].id,
+        lessonId: course2LessonIds[1],
+        body: "418 is in the table now. # and * should show as typed.",
+        createdAt: daysAgo(4),
+        updatedAt: daysAgo(4),
+      },
+      {
+        userId: students[2].id,
+        lessonId: course1LessonIds[3],
+        body: "Rewatch the generics part at 6:40.",
+        createdAt: daysAgo(9),
+        updatedAt: daysAgo(9),
+      },
+    ])
+    .run();
+
+  console.log(
+    `Created ${countRows(schema.bookmarks)} bookmarks and ${countRows(schema.notes)} notes.`
   );
 
   // ─── Lesson Progress ───
